@@ -9,13 +9,14 @@ class OptFormUi extends StatefulWidget {
       this.backGroundColor = Colors.white,
       required this.enabledColorBorder,
       required this.focusColorBorder,
-      required this.borderRadius,
+      this.borderRadius = 5.0,
       this.verifyText = 'Verify',
       this.backColorVerifyButton = Colors.blue,
       this.textColorVerifyButton = Colors.white,
       this.textFormValueHint = '',
       this.formValueColor = Colors.black,
       this.textFormValueHintColor = Colors.black,
+          this.shape=OtpDigitShape.box,
       required this.buttonAction})
       : super(key: key);
   final int numberDigits;
@@ -31,6 +32,7 @@ class OptFormUi extends StatefulWidget {
   final String textFormValueHint;
   final Color textFormValueHintColor;
   final Function buttonAction;
+  final OtpDigitShape shape;
 
   @override
   State<OptFormUi> createState() => _OptFormUiState();
@@ -75,7 +77,7 @@ class _OptFormUiState extends State<OptFormUi> {
             key: formKey,
             child: Wrap(
               children: List<Widget>.generate(widget.numberDigits, (index) {
-                return OtpTextField(
+                return OtpTextField(shape:widget.shape,previousFocusNode: index==0?FocusNode():focusNodes[index-1],
                     backGroundColor: widget.backGroundColor,
                     nextFocusNode: index == widget.numberDigits - 1
                         ? FocusNode()
@@ -84,12 +86,12 @@ class _OptFormUiState extends State<OptFormUi> {
                     labelColor: widget.labelColor,
                     textEditingController: keysController[index],
                     context: context,
-                    //isFirst: index == 0 ? true : false,
+                    isFirst: index == 0 ? true : false,
                     autoFocus: index == 0 ? true : false,
                     borderRadius: widget.borderRadius,
                     enabledColorBorder: widget.enabledColorBorder,
                     focusColorBorder: widget.focusColorBorder,
-                    //   isLast: index == widget.numberDigits - 1 ? true : false,
+                    isLast: index == widget.numberDigits - 1 ? true : false,
                     sizeScreen: sizeScreen);
               }),
             ),

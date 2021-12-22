@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otp_sample/otp_view/otp_text_field.dart';
 import 'opt_form_ui.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,7 +10,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: OptFormUi(
-        numberDigits: 12,
+        numberDigits: 6,
+        shape: OtpDigitShape.underline,
         backGroundColor: Colors.transparent,
         borderRadius: 5.0,
         enabledColorBorder: Colors.blue,

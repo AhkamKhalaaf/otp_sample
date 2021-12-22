@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OtpTextField extends StatelessWidget {
@@ -13,7 +14,11 @@ class OtpTextField extends StatelessWidget {
       required this.sizeScreen,
       required this.ownFocusNode,
       required this.nextFocusNode,
-      required this.autoFocus})
+      required this.autoFocus,
+      required this.previousFocusNode,
+      required this.isLast,
+      required this.isFirst,
+      this.shape = OtpDigitShape.box})
       : super(key: key);
   final BuildContext context;
   final Color focusColorBorder;
@@ -26,12 +31,17 @@ class OtpTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final FocusNode ownFocusNode;
   final FocusNode nextFocusNode;
+  final FocusNode previousFocusNode;
+  final bool isLast;
+  final bool isFirst;
+  final OtpDigitShape shape;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       margin: const EdgeInsets.only(left: 5.0, right: 5.0),
-      width: sizeScreen.width * 0.15,
+      width: sizeScreen.width * 0.15,height:sizeScreen.width * 0.15 ,
       child: TextFormField(
         validator: (value) {
           if (value!.isEmpty) {
@@ -43,17 +53,14 @@ class OtpTextField extends StatelessWidget {
         autofocus: true,
         textInputAction: TextInputAction.next,
         readOnly: false,
-        onFieldSubmitted: (value) {
-          FocusScope.of(context).requestFocus(nextFocusNode);
+        onChanged: (value) {
+          onChangeFunc(
+              context: context,
+              isFirstDigit: isFirst,
+              isLastDigit: isLast,
+              nexFocus: nextFocusNode,
+              value: value);
         },
-
-        // onChanged: (value) {
-        //   onChangeFunc(
-        //       context: context,
-        //       isFirstDigit: isFirst,
-        //       isLastDigit: isLast,
-        //       value: value);
-        // },
         textAlign: TextAlign.center,
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
@@ -64,17 +71,43 @@ class OtpTextField extends StatelessWidget {
             fillColor: backGroundColor,
             contentPadding: const EdgeInsets.all(0.0),
             counter: const Offstage(),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2.0, color: focusColorBorder),
+            focusedBorder: shape == OtpDigitShape.underline
+                    ? UnderlineInputBorder(borderSide: BorderSide(color: focusColorBorder)
+                      )
+                    : OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 2.0, color: focusColorBorder),
+                        borderRadius: BorderRadius.circular(borderRadius)),
+
+
+
+
+            enabledBorder:  shape == OtpDigitShape.underline
+                ? UnderlineInputBorder(borderSide: BorderSide(color: enabledColorBorder)
+            )
+                : OutlineInputBorder(
+                borderSide:
+                BorderSide(width: 2.0, color: enabledColorBorder),
+                borderRadius: BorderRadius.circular(borderRadius))
+
+
+
+            ,
+            focusedErrorBorder: shape == OtpDigitShape.underline
+                ? const UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)
+            )
+                : OutlineInputBorder(
+                borderSide:
+                const BorderSide(width: 2.0, color: Colors.red),
                 borderRadius: BorderRadius.circular(borderRadius)),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 2.0, color: enabledColorBorder),
-                borderRadius: BorderRadius.circular(borderRadius)),
-            focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2.0, color: Colors.red),
-                borderRadius: BorderRadius.circular(borderRadius)),
-            errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 2.0, color: Colors.red),
+
+
+            errorBorder:  shape == OtpDigitShape.underline
+                ? const UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)
+            )
+                : OutlineInputBorder(
+                borderSide:
+                const BorderSide(width: 2.0, color: Colors.red),
                 borderRadius: BorderRadius.circular(borderRadius))),
       ),
     );
@@ -83,12 +116,13 @@ class OtpTextField extends StatelessWidget {
   onChangeFunc(
       {required BuildContext context,
       required bool isFirstDigit,
+      required FocusNode nexFocus,
       required bool isLastDigit,
       required String value}) {
     if (value.length == 1 && isLastDigit == false) {
-      FocusScope.of(context).nextFocus();
+      FocusScope.of(context).requestFocus(nextFocusNode);
     }
-    if (value.isEmpty && isFirstDigit == false) {
+    if (value.isEmpty) {
       FocusScope.of(context).previousFocus();
     }
     if (value.length == 1 && isLastDigit == true) {
@@ -96,3 +130,5 @@ class OtpTextField extends StatelessWidget {
     }
   }
 }
+
+enum OtpDigitShape { box, underline }
