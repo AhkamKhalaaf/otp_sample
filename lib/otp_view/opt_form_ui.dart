@@ -16,7 +16,7 @@ class OptFormUi extends StatefulWidget {
       this.textFormValueHint = '',
       this.formValueColor = Colors.black,
       this.textFormValueHintColor = Colors.black,
-          this.shape=OtpDigitShape.box,
+      this.shape = OtpDigitShape.box,
       required this.buttonAction})
       : super(key: key);
   final int numberDigits;
@@ -77,22 +77,25 @@ class _OptFormUiState extends State<OptFormUi> {
             key: formKey,
             child: Wrap(
               children: List<Widget>.generate(widget.numberDigits, (index) {
-                return OtpTextField(shape:widget.shape,previousFocusNode: index==0?FocusNode():focusNodes[index-1],
-                    backGroundColor: widget.backGroundColor,
-                    nextFocusNode: index == widget.numberDigits - 1
-                        ? FocusNode()
-                        : focusNodes[index + 1],
-                    ownFocusNode: focusNodes[index],
-                    labelColor: widget.labelColor,
-                    textEditingController: keysController[index],
-                    context: context,
-                    isFirst: index == 0 ? true : false,
-                    autoFocus: index == 0 ? true : false,
-                    borderRadius: widget.borderRadius,
-                    enabledColorBorder: widget.enabledColorBorder,
-                    focusColorBorder: widget.focusColorBorder,
-                    isLast: index == widget.numberDigits - 1 ? true : false,
-                    sizeScreen: sizeScreen);
+                return OtpTextField(
+                  shape: widget.shape,
+                  previousFocusNode:
+                      index == 0 ? FocusNode() : focusNodes[index - 1],
+                  backGroundColor: widget.backGroundColor,
+                  nextFocusNode: index == widget.numberDigits - 1
+                      ? FocusNode()
+                      : focusNodes[index + 1],
+                  ownFocusNode: focusNodes[index],
+                  labelColor: widget.labelColor,
+                  textEditingController: keysController[index],
+                  context: context,
+                  isFirst: index == 0 ? true : false,
+                  autoFocus: index == 0 ? true : false,
+                  borderRadius: widget.borderRadius,
+                  enabledColorBorder: widget.enabledColorBorder,
+                  focusColorBorder: widget.focusColorBorder,
+                  isLast: index == widget.numberDigits - 1 ? true : false,
+                );
               }),
             ),
           ),

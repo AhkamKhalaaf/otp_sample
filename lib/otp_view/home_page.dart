@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       body: OptFormUi(
         numberDigits: 6,
-        shape: OtpDigitShape.underline,
+        shape: OtpDigitShape.box,
         backGroundColor: Colors.transparent,
         borderRadius: 5.0,
         enabledColorBorder: Colors.blue,
