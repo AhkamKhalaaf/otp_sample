@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OtpTextField extends StatelessWidget {
   const OtpTextField({
@@ -38,14 +39,12 @@ class OtpTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     Size sizeScreen = MediaQuery.of(context).size;
     return Container(
-      //decoration: BoxDecoration(shape: BoxShape.rectangle),
-      alignment: Alignment.center,
+       alignment: Alignment.center,
       margin: const EdgeInsets.only(left: 5.0, right: 5.0),
       width: sizeScreen.width * 0.125,
-      // height:heightDigit,
-      child: TextFormField(
+       child: TextFormField(inputFormatters: [OtpFormatter() ],
         maxLines: 1,
-        enabled: true,
+        enabled: true,showCursor: false,
         validator: (value) {
           if (value!.isEmpty) {
             return '';
@@ -57,6 +56,8 @@ class OtpTextField extends StatelessWidget {
         textInputAction: TextInputAction.next,
         readOnly: false,
         onChanged: (value) {
+          print('${value},,,vvv');
+
           onChangeFunc(
               textEditingController: textEditingController,
               context: context,
@@ -71,7 +72,7 @@ class OtpTextField extends StatelessWidget {
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
         maxLength: 1,
         controller: textEditingController,
-        decoration: InputDecoration(
+        decoration: InputDecoration(border: InputBorder.none,
             filled: true,
             fillColor: backGroundColor,
             contentPadding:
@@ -126,21 +127,11 @@ class OtpTextField extends StatelessWidget {
 
   onChangeFunc(
       {required BuildContext context,
-      //required bool isFirstDigit,
-      required FocusNode nextFocus,
+       required FocusNode nextFocus,
       required FocusNode previousFocus,
-      // required bool isLastDigit,
-      required TextEditingController textEditingController,
+       required TextEditingController textEditingController,
       required String value}) {
-    // if (value.length == 1 && isLastDigit == false) {
-    //   FocusScope.of(context).requestFocus(nextFocusNode);
-    // }
-    // if (value=='') {
-    //   FocusScope.of(context).requestFocus(previousFocus);
-    // }
-    // if (value.length == 1 && isLastDigit == true) {
-    //   FocusScope.of(context).requestFocus(FocusNode());
-    // }
+
 
     String value = textEditingController.text  ;
 
@@ -155,3 +146,10 @@ class OtpTextField extends StatelessWidget {
 }
 
 enum OtpDigitShape { box, underline, circle }
+class OtpFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+     return newValue;
+  }
+
+}
