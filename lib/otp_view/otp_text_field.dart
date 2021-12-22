@@ -38,12 +38,13 @@ class OtpTextField extends StatelessWidget {
             return '';
           }
           return null;
-        },focusNode: ownFocusNode,
+        },
+        focusNode: ownFocusNode,
         autofocus: true,
-        showCursor: false,  textInputAction: TextInputAction.next,
+        textInputAction: TextInputAction.next,
         readOnly: false,
         onFieldSubmitted: (value) {
-           FocusScope.of(context).requestFocus(nextFocusNode);
+          FocusScope.of(context).requestFocus(nextFocusNode);
         },
 
         // onChanged: (value) {
@@ -54,7 +55,8 @@ class OtpTextField extends StatelessWidget {
         //       value: value);
         // },
         textAlign: TextAlign.center,
-        style:   TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: labelColor),
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
         maxLength: 1,
         controller: textEditingController,
         decoration: InputDecoration(
