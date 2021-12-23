@@ -3,23 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OtpTextField extends StatelessWidget {
-  const OtpTextField({
-    Key? key,
-    required this.context,
-    required this.textEditingController,
-    this.backGroundColor = Colors.white,
-    required this.focusColorBorder,
-    required this.enabledColorBorder,
-    required this.borderRadius,
-    required this.labelColor,
-    required this.ownFocusNode,
-    required this.nextFocusNode,
-    required this.autoFocus,
-    required this.previousFocusNode,
-    this.isLast,
-    this.isFirst,
-    this.shape = OtpDigitShape.box,
-  }) : super(key: key);
+  const OtpTextField(
+      {Key? key,
+      required this.context,
+      required this.textEditingController,
+      this.backGroundColor = Colors.white,
+      required this.focusColorBorder,
+      required this.enabledColorBorder,
+      required this.borderRadius,
+      required this.labelColor,
+      required this.ownFocusNode,
+      required this.nextFocusNode,
+      required this.autoFocus,
+      required this.previousFocusNode,
+      this.shape = OtpDigitShape.box,
+      required this.keys,
+      required this.validateAllValues,
+      required this.initValueTextFunc})
+      : super(key: key);
   final BuildContext context;
   final Color focusColorBorder;
   final Color enabledColorBorder;
@@ -31,9 +32,10 @@ class OtpTextField extends StatelessWidget {
   final FocusNode ownFocusNode;
   final FocusNode nextFocusNode;
   final FocusNode previousFocusNode;
-  final bool? isLast;
-  final bool? isFirst;
   final OtpDigitShape shape;
+  final List<TextEditingController> keys;
+  final Function validateAllValues;
+  final Function initValueTextFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,10 @@ class OtpTextField extends StatelessWidget {
       margin: const EdgeInsets.only(left: 5.0, right: 5.0),
       width: sizeScreen.width * 0.125,
       child: TextFormField(
+        onTap: () {
+          textEditingController.selection = TextSelection.fromPosition(
+              TextPosition(offset: textEditingController.text.length));
+        },
         inputFormatters: [OtpFormatter()],
         enabled: true,
         showCursor: false,
@@ -57,21 +63,30 @@ class OtpTextField extends StatelessWidget {
         textInputAction: TextInputAction.next,
         readOnly: false,
         onChanged: (value) {
-          //print('${value},,,vvv');
-
           onChangeFunc(
               textEditingController: textEditingController,
               context: context,
-              //isFirstDigit: isFirst,
-              //  isLastDigit: isLast,
               nextFocus: nextFocusNode,
               previousFocus: previousFocusNode,
               value: value);
+          int indexItem = 0;
+          for (int i = 0; i < keys.length; i++) {
+            if (keys[i].text != '') {
+              indexItem = indexItem + 1;
+            }
+          }
+          if (indexItem == keys.length) {
+            validateAllValues();
+          }
+          if(indexItem==0)
+            {
+              initValueTextFunc();
+            }
         },
+        keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
-        //   maxLength: 2,
         controller: textEditingController,
         decoration: InputDecoration(
             border: InputBorder.none,
@@ -156,10 +171,10 @@ class OtpFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    try{ return oldValue.copyWith(text: newValue.text.characters.last.trim());}
-    catch(e){
-      return oldValue;
+    try {
+      return oldValue.copyWith(text: newValue.text.characters.last.trim());
+    } catch (e) {
+      return oldValue.copyWith(text: "");
     }
-
   }
 }
