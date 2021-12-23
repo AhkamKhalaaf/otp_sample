@@ -43,13 +43,12 @@ class _OptFormUiState extends State<OptFormUi> {
   List<FocusNode> focusNodes = [];
   String valueText = '';
   final formKey = GlobalKey<FormState>();
- initValueText()
- {
-   valueText='';
-   setState(() {
 
-   });
- }
+  initValueText() {
+    valueText = '';
+    setState(() {});
+  }
+
   initFormControl(int numberDigits) {
     for (int i = 0; i < numberDigits; i++) {
       var textEdit = TextEditingController();
@@ -85,9 +84,11 @@ class _OptFormUiState extends State<OptFormUi> {
             key: formKey,
             child: Wrap(
               children: List<Widget>.generate(widget.numberDigits, (index) {
-                return OtpTextField(firstFocus: focusNodes[0], initValueTextFunc: (){
-                  initValueText();
-                },
+                return OtpTextField(
+                  firstFocus: focusNodes[0],
+                  initValueTextFunc: () {
+                    initValueText();
+                  },
                   keys: keysController,
                   validateAllValues: () {
                     findValueOfOtp();
@@ -154,6 +155,13 @@ class _OptFormUiState extends State<OptFormUi> {
     FocusScope.of(context).unfocus();
     valueText = '';
     if (!formKey.currentState!.validate()) {
+      for (int i = 0; i < keysController.length; i++) {
+        if (keysController[i].text.isEmpty) {
+          FocusScope.of(context).requestFocus(focusNodes[i]);
+          return;
+        }
+      }
+
       return;
     }
     formKey.currentState!.save();
