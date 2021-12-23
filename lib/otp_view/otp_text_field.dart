@@ -16,8 +16,8 @@ class OtpTextField extends StatelessWidget {
     required this.nextFocusNode,
     required this.autoFocus,
     required this.previousFocusNode,
-      this.isLast,
-      this.isFirst,
+    this.isLast,
+    this.isFirst,
     this.shape = OtpDigitShape.box,
   }) : super(key: key);
   final BuildContext context;
@@ -39,14 +39,13 @@ class OtpTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     Size sizeScreen = MediaQuery.of(context).size;
     return Container(
-       alignment: Alignment.center,
+      alignment: Alignment.center,
       margin: const EdgeInsets.only(left: 5.0, right: 5.0),
       width: sizeScreen.width * 0.125,
-       child: TextFormField(inputFormatters: [
-        OtpFormatter()
-       ],
-         enabled: true,
-       showCursor: false,
+      child: TextFormField(
+        inputFormatters: [OtpFormatter()],
+        enabled: true,
+        showCursor: false,
         validator: (value) {
           if (value!.isEmpty) {
             return '';
@@ -72,9 +71,10 @@ class OtpTextField extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
-     //   maxLength: 2,
+        //   maxLength: 2,
         controller: textEditingController,
-        decoration: InputDecoration(border: InputBorder.none,
+        decoration: InputDecoration(
+            border: InputBorder.none,
             filled: true,
             fillColor: backGroundColor,
             contentPadding:
@@ -94,48 +94,51 @@ class OtpTextField extends StatelessWidget {
                         borderRadius: BorderRadius.circular(borderRadius)),
             enabledBorder: shape == OtpDigitShape.underline
                 ? UnderlineInputBorder(
-                    borderSide: BorderSide(color: enabledColorBorder)):shape == OtpDigitShape.circle
-                ? OutlineInputBorder(
-                borderSide:
-                BorderSide(width: 2.0, color: enabledColorBorder),
-                borderRadius: BorderRadius.circular(25.0))
-                : OutlineInputBorder(
-                    borderSide:
-                        BorderSide(width: 2.0, color: enabledColorBorder),
-                    borderRadius: BorderRadius.circular(borderRadius)),
+                    borderSide: BorderSide(color: enabledColorBorder))
+                : shape == OtpDigitShape.circle
+                    ? OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 2.0, color: enabledColorBorder),
+                        borderRadius: BorderRadius.circular(25.0))
+                    : OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 2.0, color: enabledColorBorder),
+                        borderRadius: BorderRadius.circular(borderRadius)),
             focusedErrorBorder: shape == OtpDigitShape.underline
                 ? const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)):shape == OtpDigitShape.circle
-                ? OutlineInputBorder(
-                borderSide:
-                const BorderSide(width: 2.0, color: Colors.red),
-                borderRadius: BorderRadius.circular(25.0))
-                : OutlineInputBorder(
-                    borderSide: const BorderSide(width: 2.0, color: Colors.red),
-                    borderRadius: BorderRadius.circular(borderRadius)),
+                    borderSide: BorderSide(color: Colors.red))
+                : shape == OtpDigitShape.circle
+                    ? OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 2.0, color: Colors.red),
+                        borderRadius: BorderRadius.circular(25.0))
+                    : OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 2.0, color: Colors.red),
+                        borderRadius: BorderRadius.circular(borderRadius)),
             errorBorder: shape == OtpDigitShape.underline
                 ? const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)):shape == OtpDigitShape.circle
-                ? OutlineInputBorder(
-                borderSide:
-                const BorderSide(width: 2.0, color: Colors.red),
-                borderRadius: BorderRadius.circular(25.0))
-                : OutlineInputBorder(
-                    borderSide: const BorderSide(width: 2.0, color: Colors.red),
-                    borderRadius: BorderRadius.circular(borderRadius))),
+                    borderSide: BorderSide(color: Colors.red))
+                : shape == OtpDigitShape.circle
+                    ? OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 2.0, color: Colors.red),
+                        borderRadius: BorderRadius.circular(25.0))
+                    : OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 2.0, color: Colors.red),
+                        borderRadius: BorderRadius.circular(borderRadius))),
       ),
     );
   }
 
   onChangeFunc(
       {required BuildContext context,
-       required FocusNode nextFocus,
+      required FocusNode nextFocus,
       required FocusNode previousFocus,
-       required TextEditingController textEditingController,
+      required TextEditingController textEditingController,
       required String value}) {
-
-
-    String value = textEditingController.text  ;
+    String value = textEditingController.text;
 
     if (value.isEmpty) {
       // request focus for the previous "box"
@@ -151,13 +154,12 @@ enum OtpDigitShape { box, underline, circle }
 
 class OtpFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-
-     return oldValue.copyWith(text: newValue.text.characters.last);
-
-
-
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    try{ return oldValue.copyWith(text: newValue.text.characters.last.trim());}
+    catch(e){
+      return oldValue.copyWith(text:'');
+    }
 
   }
-
 }
