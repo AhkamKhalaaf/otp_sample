@@ -16,8 +16,8 @@ class OtpTextField extends StatelessWidget {
     required this.nextFocusNode,
     required this.autoFocus,
     required this.previousFocusNode,
-    required this.isLast,
-    required this.isFirst,
+      this.isLast,
+      this.isFirst,
     this.shape = OtpDigitShape.box,
   }) : super(key: key);
   final BuildContext context;
@@ -31,8 +31,8 @@ class OtpTextField extends StatelessWidget {
   final FocusNode ownFocusNode;
   final FocusNode nextFocusNode;
   final FocusNode previousFocusNode;
-  final bool isLast;
-  final bool isFirst;
+  final bool? isLast;
+  final bool? isFirst;
   final OtpDigitShape shape;
 
   @override
@@ -42,9 +42,11 @@ class OtpTextField extends StatelessWidget {
        alignment: Alignment.center,
       margin: const EdgeInsets.only(left: 5.0, right: 5.0),
       width: sizeScreen.width * 0.125,
-       child: TextFormField(inputFormatters: [OtpFormatter() ],
-        maxLines: 1,
-        enabled: true,showCursor: false,
+       child: TextFormField(inputFormatters: [
+        OtpFormatter()
+       ],
+         enabled: true,
+       showCursor: false,
         validator: (value) {
           if (value!.isEmpty) {
             return '';
@@ -56,7 +58,7 @@ class OtpTextField extends StatelessWidget {
         textInputAction: TextInputAction.next,
         readOnly: false,
         onChanged: (value) {
-          print('${value},,,vvv');
+          //print('${value},,,vvv');
 
           onChangeFunc(
               textEditingController: textEditingController,
@@ -70,7 +72,7 @@ class OtpTextField extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
-        maxLength: 1,
+     //   maxLength: 2,
         controller: textEditingController,
         decoration: InputDecoration(border: InputBorder.none,
             filled: true,
@@ -146,10 +148,16 @@ class OtpTextField extends StatelessWidget {
 }
 
 enum OtpDigitShape { box, underline, circle }
+
 class OtpFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-     return newValue;
+
+     return oldValue.copyWith(text: newValue.text.characters.last);
+
+
+
+
   }
 
 }
