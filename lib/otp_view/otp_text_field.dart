@@ -158,7 +158,7 @@ class OtpFormatter extends TextInputFormatter {
       TextEditingValue oldValue, TextEditingValue newValue) {
     try{ return oldValue.copyWith(text: newValue.text.characters.last.trim());}
     catch(e){
-      return oldValue.copyWith(text:'');
+      return oldValue;
     }
 
   }
