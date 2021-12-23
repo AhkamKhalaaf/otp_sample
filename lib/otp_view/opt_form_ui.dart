@@ -75,78 +75,80 @@ class _OptFormUiState extends State<OptFormUi> {
           right: sizeScreen.width * 0.05,
           top: sizeScreen.width * 0.1,
           bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Form(
-            key: formKey,
-            child: Wrap(
-              children: List<Widget>.generate(widget.numberDigits, (index) {
-                return OtpTextField(
-                  firstFocus: focusNodes[0],
-                  initValueTextFunc: () {
-                    initValueText();
-                  },
-                  keys: keysController,
-                  validateAllValues: () {
-                    findValueOfOtp();
-                  },
-                  shape: widget.shape,
-                  previousFocusNode:
-                      index == 0 ? FocusNode() : focusNodes[index - 1],
-                  backGroundColor: widget.backGroundColor,
-                  nextFocusNode: index == widget.numberDigits - 1
-                      ? FocusNode()
-                      : focusNodes[index + 1],
-                  ownFocusNode: focusNodes[index],
-                  labelColor: widget.labelColor,
-                  textEditingController: keysController[index],
-                  context: context,
-                  //   isFirst: index == 0 ? true : false,
-                  autoFocus: index == 0 ? true : false,
-                  borderRadius: widget.borderRadius,
-                  enabledColorBorder: widget.enabledColorBorder,
-                  focusColorBorder: widget.focusColorBorder,
-                  //  isLast: index == widget.numberDigits - 1 ? true : false,
-                );
-              }),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Form(
+              key: formKey,
+              child: Wrap(
+                children: List<Widget>.generate(widget.numberDigits, (index) {
+                  return OtpTextField(
+                    firstFocus: focusNodes[0],
+                    initValueTextFunc: () {
+                      initValueText();
+                    },
+                    keys: keysController,
+                    validateAllValues: () {
+                      findValueOfOtp();
+                    },
+                    shape: widget.shape,
+                    previousFocusNode:
+                        index == 0 ? FocusNode() : focusNodes[index - 1],
+                    backGroundColor: widget.backGroundColor,
+                    nextFocusNode: index == widget.numberDigits - 1
+                        ? FocusNode()
+                        : focusNodes[index + 1],
+                    ownFocusNode: focusNodes[index],
+                    labelColor: widget.labelColor,
+                    textEditingController: keysController[index],
+                    context: context,
+                    //   isFirst: index == 0 ? true : false,
+                    autoFocus: index == 0 ? true : false,
+                    borderRadius: widget.borderRadius,
+                    enabledColorBorder: widget.enabledColorBorder,
+                    focusColorBorder: widget.focusColorBorder,
+                    //  isLast: index == widget.numberDigits - 1 ? true : false,
+                  );
+                }),
+              ),
             ),
-          ),
-          SizedBox(
-            height: sizeScreen.width * 0.05,
-          ),
-          RichText(
-            text: TextSpan(
-              text: widget.textFormValueHint,
-              style: TextStyle(
-                  color: widget.textFormValueHintColor,
-                  fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                TextSpan(
-                    text: valueText,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: widget.formValueColor,
-                        letterSpacing: 2.0)),
-              ],
+            SizedBox(
+              height: sizeScreen.width * 0.05,
             ),
-          ),
-          SizedBox(
-            height: sizeScreen.width * 0.05,
-          ),
-          MaterialButton(
-            color: widget.backColorVerifyButton,
-            onPressed: () {
-              findValueOfOtp();
-            },
-            child: Text(
-              widget.verifyText,
-              style: TextStyle(color: widget.textColorVerifyButton),
+            RichText(
+              text: TextSpan(
+                text: widget.textFormValueHint,
+                style: TextStyle(
+                    color: widget.textFormValueHintColor,
+                    fontWeight: FontWeight.bold),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: valueText,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: widget.formValueColor,
+                          letterSpacing: 2.0)),
+                ],
+              ),
             ),
-          )
-        ],
+            SizedBox(
+              height: sizeScreen.width * 0.05,
+            ),
+            MaterialButton(
+              color: widget.backColorVerifyButton,
+              onPressed: () {
+                findValueOfOtp();
+              },
+              child: Text(
+                widget.verifyText,
+                style: TextStyle(color: widget.textColorVerifyButton),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

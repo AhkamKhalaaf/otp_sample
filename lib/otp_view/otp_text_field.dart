@@ -80,11 +80,10 @@ class OtpTextField extends StatelessWidget {
           if (indexItem == keys.length) {
             validateAllValues();
           }
-          if(indexItem==0)
-            {
-              initValueTextFunc();
-              FocusScope.of(context).requestFocus(firstFocus);
-            }
+          if (indexItem == 0) {
+            initValueTextFunc();
+            FocusScope.of(context).requestFocus(firstFocus);
+          }
         },
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
