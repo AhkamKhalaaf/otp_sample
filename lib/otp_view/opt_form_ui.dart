@@ -85,7 +85,7 @@ class _OptFormUiState extends State<OptFormUi> {
             key: formKey,
             child: Wrap(
               children: List<Widget>.generate(widget.numberDigits, (index) {
-                return OtpTextField( initValueTextFunc: (){
+                return OtpTextField(firstFocus: focusNodes[0], initValueTextFunc: (){
                   initValueText();
                 },
                   keys: keysController,

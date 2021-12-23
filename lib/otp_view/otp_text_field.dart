@@ -19,7 +19,8 @@ class OtpTextField extends StatelessWidget {
       this.shape = OtpDigitShape.box,
       required this.keys,
       required this.validateAllValues,
-      required this.initValueTextFunc})
+      required this.initValueTextFunc,
+      required this.firstFocus})
       : super(key: key);
   final BuildContext context;
   final Color focusColorBorder;
@@ -36,6 +37,7 @@ class OtpTextField extends StatelessWidget {
   final List<TextEditingController> keys;
   final Function validateAllValues;
   final Function initValueTextFunc;
+  final FocusNode firstFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +83,7 @@ class OtpTextField extends StatelessWidget {
           if(indexItem==0)
             {
               initValueTextFunc();
+              FocusScope.of(context).requestFocus(firstFocus);
             }
         },
         keyboardType: TextInputType.number,
