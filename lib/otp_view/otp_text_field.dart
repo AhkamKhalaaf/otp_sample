@@ -14,7 +14,7 @@ class OtpTextField extends StatelessWidget {
       required this.labelColor,
       required this.ownFocusNode,
       required this.nextFocusNode,
-       required this.previousFocusNode,
+      required this.previousFocusNode,
       this.shape = OtpDigitShape.box,
       required this.keys,
       required this.validateAllValues,
@@ -27,7 +27,7 @@ class OtpTextField extends StatelessWidget {
   final Color backGroundColor;
   final double borderRadius;
   final Color labelColor;
-   final TextEditingController textEditingController;
+  final TextEditingController textEditingController;
   final FocusNode ownFocusNode;
   final FocusNode nextFocusNode;
   final FocusNode previousFocusNode;
@@ -50,7 +50,7 @@ class OtpTextField extends StatelessWidget {
               TextPosition(offset: textEditingController.text.length));
         },
         inputFormatters: <TextInputFormatter>[
-           OtpFormatter(),
+          OtpFormatter(),
           FilteringTextInputFormatter.digitsOnly,
         ],
         enabled: true,
@@ -67,11 +67,11 @@ class OtpTextField extends StatelessWidget {
         readOnly: false,
         onChanged: (value) {
           onChangeFunc(
-              textEditingController: textEditingController,
-              context: context,
-              nextFocus: nextFocusNode,
-              previousFocus: previousFocusNode,
-              value: value);
+            textEditingController: textEditingController,
+            context: context,
+            nextFocus: nextFocusNode,
+            previousFocus: previousFocusNode,
+          );
           int indexItem = 0;
           for (int i = 0; i < keys.length; i++) {
             if (keys[i].text != '') {
@@ -86,7 +86,7 @@ class OtpTextField extends StatelessWidget {
             FocusScope.of(context).requestFocus(firstFocus);
           }
         },
-        keyboardType:   TextInputType.number,
+        keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
@@ -150,21 +150,23 @@ class OtpTextField extends StatelessWidget {
     );
   }
 
-  onChangeFunc(
-      {required BuildContext context,
-      required FocusNode nextFocus,
-      required FocusNode previousFocus,
-      required TextEditingController textEditingController,
-      required String value}) {
+  onChangeFunc({
+    required BuildContext context,
+    required FocusNode nextFocus,
+    required FocusNode previousFocus,
+    required TextEditingController textEditingController,
+  }) {
     String value = textEditingController.text;
 
     if (value.isEmpty) {
       // request focus for the previous "box"
-     FocusScope.of(context).requestFocus(previousFocus);
+      FocusScope.of(context).requestFocus(previousFocus);
       return;
     }
     // request focus for the next "box"
-   FocusScope.of(context).requestFocus(nextFocus);
+    FocusScope.of(context).requestFocus(nextFocus);
+    textEditingController.selection = TextSelection.fromPosition(
+        TextPosition(offset: textEditingController.text.length));
   }
 }
 
@@ -174,11 +176,17 @@ class OtpFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    try {
-      final intValue = int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
-      return oldValue.copyWith(text: intValue.toString().characters.last.trim());
-    } catch (e) {
-      return oldValue.copyWith(text: "");
-    }
+    final intValue =
+    int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
+    return oldValue.copyWith(
+        text: intValue.toString().characters.last.trim());
+    // try {
+    //   final intValue =
+    //       int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
+    //   return oldValue.copyWith(
+    //       text: intValue.toString().characters.last.trim());
+    // } catch (e) {
+    //   return oldValue.copyWith(text: "");
+    // }
   }
 }
