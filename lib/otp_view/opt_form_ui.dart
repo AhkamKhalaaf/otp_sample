@@ -96,7 +96,7 @@ class _OptFormUiState extends State<OptFormUi> {
                     },
                     shape: widget.shape,
                     previousFocusNode:
-                        index == 0 ? FocusNode() : focusNodes[index - 1],
+                        index == 0 ?focusNodes[0] : focusNodes[index - 1],
                     backGroundColor: widget.backGroundColor,
                     nextFocusNode: index == widget.numberDigits - 1
                         ? FocusNode()
@@ -106,8 +106,7 @@ class _OptFormUiState extends State<OptFormUi> {
                     textEditingController: keysController[index],
                     context: context,
                     //   isFirst: index == 0 ? true : false,
-                    autoFocus: index == 0 ? true : false,
-                    borderRadius: widget.borderRadius,
+                     borderRadius: widget.borderRadius,
                     enabledColorBorder: widget.enabledColorBorder,
                     focusColorBorder: widget.focusColorBorder,
                     //  isLast: index == widget.numberDigits - 1 ? true : false,
