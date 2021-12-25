@@ -44,9 +44,8 @@ class OtpTextField extends StatefulWidget {
 class _OtpTextFieldState extends State<OtpTextField> {
   KeyEventResult onKey(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent &&
-            event.logicalKey == LogicalKeyboardKey.backspace
-        && widget.textEditingController.text.isEmpty
-        ) {
+        event.logicalKey == LogicalKeyboardKey.backspace &&
+        widget.textEditingController.text.isEmpty) {
       FocusScope.of(context).requestFocus(widget.previousFocusNode);
 
       return KeyEventResult.handled;
@@ -138,16 +137,16 @@ class _OtpTextFieldState extends State<OtpTextField> {
                           borderRadius:
                               BorderRadius.circular(widget.borderRadius)),
               focusedErrorBorder: widget.shape == OtpDigitShape.underline
-                  ?   UnderlineInputBorder(
+                  ? UnderlineInputBorder(
                       borderSide: BorderSide(color: widget.focusColorBorder))
                   : widget.shape == OtpDigitShape.circle
                       ? OutlineInputBorder(
-                          borderSide:
-                                BorderSide(width: 1.0, color:widget.focusColorBorder),
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.focusColorBorder),
                           borderRadius: BorderRadius.circular(100.0))
                       : OutlineInputBorder(
-                          borderSide:
-                                BorderSide(width: 1.0, color: widget.focusColorBorder),
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.focusColorBorder),
                           borderRadius:
                               BorderRadius.circular(widget.borderRadius)),
               errorBorder: widget.shape == OtpDigitShape.underline

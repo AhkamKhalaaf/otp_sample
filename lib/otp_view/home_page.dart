@@ -10,7 +10,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: OptFormUi(
-        numberDigits:4,
+        numberDigits: 4,
+          
         shape: OtpDigitShape.rectangle,
         backGroundColor: Colors.grey.withOpacity(0.125),
         borderRadius: 10.0,
