@@ -16,7 +16,7 @@ class OptFormUi extends StatefulWidget {
       this.textFormValueHint = '',
       this.formValueColor = Colors.black,
       this.textFormValueHintColor = Colors.black,
-      this.shape = OtpDigitShape.box,
+      this.shape = OtpDigitShape.rectangle,
       required this.buttonAction})
       : super(key: key);
   final int numberDigits;
@@ -57,6 +57,13 @@ class _OptFormUiState extends State<OptFormUi> {
       focusNodes.add(focusNode$i);
       textEdit.addListener(() {});
     }
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    for (var element in keysController) {element.dispose();}
+    for (var element in focusNodes) {element.dispose();}
   }
 
   @override
@@ -99,7 +106,7 @@ class _OptFormUiState extends State<OptFormUi> {
                         index == 0 ?focusNodes[0] : focusNodes[index - 1],
                     backGroundColor: widget.backGroundColor,
                     nextFocusNode: index == widget.numberDigits - 1
-                        ? FocusNode()
+                        ? focusNodes[widget.numberDigits - 1]
                         : focusNodes[index + 1],
                     ownFocusNode: focusNodes[index],
                     labelColor: widget.labelColor,

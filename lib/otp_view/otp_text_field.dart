@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class OtpTextField extends StatelessWidget {
+class OtpTextField extends StatefulWidget {
   const OtpTextField(
       {Key? key,
       required this.context,
@@ -15,7 +15,7 @@ class OtpTextField extends StatelessWidget {
       required this.ownFocusNode,
       required this.nextFocusNode,
       required this.previousFocusNode,
-      this.shape = OtpDigitShape.box,
+      this.shape = OtpDigitShape.rectangle,
       required this.keys,
       required this.validateAllValues,
       required this.initValueTextFunc,
@@ -38,114 +38,141 @@ class OtpTextField extends StatelessWidget {
   final FocusNode firstFocus;
 
   @override
+  State<OtpTextField> createState() => _OtpTextFieldState();
+}
+
+class _OtpTextFieldState extends State<OtpTextField> {
+  KeyEventResult onKey(FocusNode node, RawKeyEvent event) {
+    if (event is RawKeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.backspace
+        //&& widget.textEditingController.text.isEmpty
+    ) {
+       FocusScope.of(context).requestFocus(widget.previousFocusNode);
+
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size sizeScreen = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.center,
-      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+      margin: EdgeInsets.only(
+          left: sizeScreen.width * 0.025, right: sizeScreen.width * 0.025),
       width: sizeScreen.width * 0.125,
-      child: TextFormField(
-        onTap: () {
-          textEditingController.selection = TextSelection.fromPosition(
-              TextPosition(offset: textEditingController.text.length));
-        },
-        inputFormatters: <TextInputFormatter>[
-          OtpFormatter(),
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        enabled: true,
-        showCursor: false,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return '';
-          }
-          return null;
-        },
-        focusNode: ownFocusNode,
-        autofocus: true,
-        textInputAction: TextInputAction.next,
-        readOnly: false,
-        onChanged: (value) {
-          onChangeFunc(
-            textEditingController: textEditingController,
-            context: context,
-            nextFocus: nextFocusNode,
-            previousFocus: previousFocusNode,
-          );
-          int indexItem = 0;
-          for (int i = 0; i < keys.length; i++) {
-            if (keys[i].text != '') {
-              indexItem = indexItem + 1;
+      child: Focus(
+        onKey: onKey,
+        child: TextFormField(
+          onTap: () {
+            onTapFunction();
+          },
+          inputFormatters: <TextInputFormatter>[
+            OtpFormatter(),
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          enabled: true,
+          showCursor: false,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return '';
             }
-          }
-          if (indexItem == keys.length) {
-            validateAllValues();
-          }
-          if (indexItem == 0) {
-            initValueTextFunc();
-            FocusScope.of(context).requestFocus(firstFocus);
-          }
-        },
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 20.0, color: labelColor),
-        controller: textEditingController,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            filled: true,
-            fillColor: backGroundColor,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            counter: const Offstage(),
-            focusedBorder: shape == OtpDigitShape.underline
-                ? UnderlineInputBorder(
-                    borderSide: BorderSide(color: focusColorBorder))
-                : shape == OtpDigitShape.circle
-                    ? OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2.0, color: focusColorBorder),
-                        borderRadius: BorderRadius.circular(25.0))
-                    : OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2.0, color: focusColorBorder),
-                        borderRadius: BorderRadius.circular(borderRadius)),
-            enabledBorder: shape == OtpDigitShape.underline
-                ? UnderlineInputBorder(
-                    borderSide: BorderSide(color: enabledColorBorder))
-                : shape == OtpDigitShape.circle
-                    ? OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2.0, color: enabledColorBorder),
-                        borderRadius: BorderRadius.circular(25.0))
-                    : OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 2.0, color: enabledColorBorder),
-                        borderRadius: BorderRadius.circular(borderRadius)),
-            focusedErrorBorder: shape == OtpDigitShape.underline
-                ? const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red))
-                : shape == OtpDigitShape.circle
-                    ? OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2.0, color: Colors.red),
-                        borderRadius: BorderRadius.circular(25.0))
-                    : OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2.0, color: Colors.red),
-                        borderRadius: BorderRadius.circular(borderRadius)),
-            errorBorder: shape == OtpDigitShape.underline
-                ? const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red))
-                : shape == OtpDigitShape.circle
-                    ? OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2.0, color: Colors.red),
-                        borderRadius: BorderRadius.circular(25.0))
-                    : OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2.0, color: Colors.red),
-                        borderRadius: BorderRadius.circular(borderRadius))),
+            return null;
+          },
+          focusNode: widget.ownFocusNode,
+          autofocus: true,
+          textInputAction: TextInputAction.next,
+          readOnly: false,
+          onChanged: (value) {
+            onChangeFunc(
+              textEditingController: widget.textEditingController,
+              context: context,
+              nextFocus: widget.nextFocusNode,
+              previousFocus: widget.previousFocusNode,
+            );
+            int indexItem = 0;
+            for (int i = 0; i < widget.keys.length; i++) {
+              if (widget.keys[i].text != '') {
+                indexItem = indexItem + 1;
+              }
+            }
+            if (indexItem == widget.keys.length) {
+              widget.validateAllValues();
+            }
+            if (indexItem == 0) {
+              widget.initValueTextFunc();
+              FocusScope.of(context).requestFocus(widget.firstFocus);
+            }
+          },
+          keyboardType: TextInputType.number,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: widget.labelColor),
+          controller: widget.textEditingController,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              filled: true,
+              fillColor: widget.backGroundColor,
+              contentPadding: EdgeInsets.symmetric(
+                vertical: widget.shape == OtpDigitShape.circle ? 10.0 : 15.0,
+              ),
+              counter: const Offstage(),
+              focusedBorder: widget.shape == OtpDigitShape.underline
+                  ? UnderlineInputBorder(
+                      borderSide: BorderSide(color: widget.focusColorBorder))
+                  : widget.shape == OtpDigitShape.circle
+                      ? OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.focusColorBorder),
+                          borderRadius: BorderRadius.circular(100.0))
+                      : OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.focusColorBorder),
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadius)),
+              enabledBorder: widget.shape == OtpDigitShape.underline
+                  ? UnderlineInputBorder(
+                      borderSide: BorderSide(color: widget.enabledColorBorder))
+                  : widget.shape == OtpDigitShape.circle
+                      ? OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.enabledColorBorder),
+                          borderRadius: BorderRadius.circular(100.0))
+                      : OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.0, color: widget.enabledColorBorder),
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadius)),
+              focusedErrorBorder: widget.shape == OtpDigitShape.underline
+                  ? const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red))
+                  : widget.shape == OtpDigitShape.circle
+                      ? OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1.0, color: Colors.red),
+                          borderRadius: BorderRadius.circular(100.0))
+                      : OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1.0, color: Colors.red),
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadius)),
+              errorBorder: widget.shape == OtpDigitShape.underline
+                  ? const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red))
+                  : widget.shape == OtpDigitShape.circle
+                      ? OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1.0, color: Colors.red),
+                          borderRadius: BorderRadius.circular(100.0))
+                      : OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1.0, color: Colors.red),
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadius))),
+        ),
       ),
     );
   }
@@ -161,6 +188,8 @@ class OtpTextField extends StatelessWidget {
     if (value.isEmpty) {
       // request focus for the previous "box"
       FocusScope.of(context).requestFocus(previousFocus);
+      textEditingController.selection = TextSelection.fromPosition(
+          TextPosition(offset: textEditingController.text.length));
       return;
     }
     // request focus for the next "box"
@@ -168,25 +197,26 @@ class OtpTextField extends StatelessWidget {
     textEditingController.selection = TextSelection.fromPosition(
         TextPosition(offset: textEditingController.text.length));
   }
+
+  void onTapFunction() {
+    widget.textEditingController.selection = TextSelection.fromPosition(
+        TextPosition(offset: widget.textEditingController.text.length));
+  }
 }
 
-enum OtpDigitShape { box, underline, circle }
+enum OtpDigitShape { rectangle, underline, circle }
 
 class OtpFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    final intValue =
-    int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
-    return oldValue.copyWith(
-        text: intValue.toString().characters.last.trim());
-    // try {
-    //   final intValue =
-    //       int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
-    //   return oldValue.copyWith(
-    //       text: intValue.toString().characters.last.trim());
-    // } catch (e) {
-    //   return oldValue.copyWith(text: "");
-    // }
+    try {
+      final intValue =
+          int.parse(newValue.text.replaceAll(RegExp('[^0-9]'), ''));
+      return oldValue.copyWith(
+          text: intValue.toString().characters.last.trim());
+    } catch (e) {
+      return oldValue.copyWith(text: "");
+    }
   }
 }
