@@ -10,12 +10,12 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: OptFormUi(
-        numberDigits:5,
-        shape: OtpDigitShape.underline,
+        numberDigits:4,
+        shape: OtpDigitShape.rectangle,
         backGroundColor: Colors.grey.withOpacity(0.125),
         borderRadius: 10.0,
-        enabledColorBorder: Colors.blue,
-        focusColorBorder: Colors.amber,
+        enabledColorBorder: Colors.grey.withOpacity(0.5),
+        focusColorBorder: Colors.green,
         textColorVerifyButton: Colors.amber,
         verifyText: 'Send',
         backColorVerifyButton: Colors.green,

@@ -44,10 +44,10 @@ class OtpTextField extends StatefulWidget {
 class _OtpTextFieldState extends State<OtpTextField> {
   KeyEventResult onKey(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent &&
-        event.logicalKey == LogicalKeyboardKey.backspace
+            event.logicalKey == LogicalKeyboardKey.backspace
         //&& widget.textEditingController.text.isEmpty
-    ) {
-       FocusScope.of(context).requestFocus(widget.previousFocusNode);
+        ) {
+      FocusScope.of(context).requestFocus(widget.previousFocusNode);
 
       return KeyEventResult.handled;
     }
@@ -61,7 +61,9 @@ class _OtpTextFieldState extends State<OtpTextField> {
       alignment: Alignment.center,
       margin: EdgeInsets.only(
           left: sizeScreen.width * 0.025, right: sizeScreen.width * 0.025),
-      width: sizeScreen.width * 0.125,
+      width: widget.shape == OtpDigitShape.rectangle
+          ? sizeScreen.width * 0.12
+          : sizeScreen.width * 0.14,
       child: Focus(
         onKey: onKey,
         child: TextFormField(
@@ -81,6 +83,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
             return null;
           },
           focusNode: widget.ownFocusNode,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           autofocus: true,
           textInputAction: TextInputAction.next,
           readOnly: false,
@@ -91,19 +94,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
               nextFocus: widget.nextFocusNode,
               previousFocus: widget.previousFocusNode,
             );
-            int indexItem = 0;
-            for (int i = 0; i < widget.keys.length; i++) {
-              if (widget.keys[i].text != '') {
-                indexItem = indexItem + 1;
-              }
-            }
-            if (indexItem == widget.keys.length) {
-              widget.validateAllValues();
-            }
-            if (indexItem == 0) {
-              widget.initValueTextFunc();
-              FocusScope.of(context).requestFocus(widget.firstFocus);
-            }
+            autoSendValues();
           },
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
@@ -147,16 +138,16 @@ class _OtpTextFieldState extends State<OtpTextField> {
                           borderRadius:
                               BorderRadius.circular(widget.borderRadius)),
               focusedErrorBorder: widget.shape == OtpDigitShape.underline
-                  ? const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red))
+                  ?   UnderlineInputBorder(
+                      borderSide: BorderSide(color: widget.focusColorBorder))
                   : widget.shape == OtpDigitShape.circle
                       ? OutlineInputBorder(
                           borderSide:
-                              const BorderSide(width: 1.0, color: Colors.red),
+                                BorderSide(width: 1.0, color:widget.focusColorBorder),
                           borderRadius: BorderRadius.circular(100.0))
                       : OutlineInputBorder(
                           borderSide:
-                              const BorderSide(width: 1.0, color: Colors.red),
+                                BorderSide(width: 1.0, color: widget.focusColorBorder),
                           borderRadius:
                               BorderRadius.circular(widget.borderRadius)),
               errorBorder: widget.shape == OtpDigitShape.underline
@@ -201,6 +192,22 @@ class _OtpTextFieldState extends State<OtpTextField> {
   void onTapFunction() {
     widget.textEditingController.selection = TextSelection.fromPosition(
         TextPosition(offset: widget.textEditingController.text.length));
+  }
+
+  void autoSendValues() {
+    int indexItem = 0;
+    for (int i = 0; i < widget.keys.length; i++) {
+      if (widget.keys[i].text != '') {
+        indexItem = indexItem + 1;
+      }
+    }
+    if (indexItem == widget.keys.length) {
+      widget.validateAllValues();
+    }
+    if (indexItem == 0) {
+      widget.initValueTextFunc();
+      FocusScope.of(context).requestFocus(widget.firstFocus);
+    }
   }
 }
 
