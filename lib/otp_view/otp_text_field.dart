@@ -45,7 +45,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
   KeyEventResult onKey(FocusNode node, RawKeyEvent event) {
     if (event is RawKeyDownEvent &&
             event.logicalKey == LogicalKeyboardKey.backspace
-        //&& widget.textEditingController.text.isEmpty
+        && widget.textEditingController.text.isEmpty
         ) {
       FocusScope.of(context).requestFocus(widget.previousFocusNode);
 
